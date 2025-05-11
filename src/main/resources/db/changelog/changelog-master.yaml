@@ -1,0 +1,176 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: vitali
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: first_name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: username
+                  type: varchar(30)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: password
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: tasks
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: title
+                  type: varchar(200)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: varchar(1000)
+              - column:
+                  name: link
+                  type: varchar(255)
+              - column:
+                  name: status
+                  type: varchar(50)
+              - column:
+                  name: payment_amount
+                  type: double
+              - column:
+                  name: payment_due_date
+                  type: date
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_user_id
+                    references: users(id)
+  - changeSet:
+      id: 2
+      author: vitali
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: first_name
+                  value: "Zoya"
+              - column:
+                  name: last_name
+                  value: "Ladyzhenka"
+              - column:
+                  name: email
+                  value: "zoya@example.com"
+              - column:
+                  name: username
+                  value: "zoya"
+              - column:
+                  name: password
+                  value: "adminpass"
+              - column:
+                  name: role
+                  value: "ADMIN"
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: first_name
+                  value: "Vitali"
+              - column:
+                  name: last_name
+                  value: "Ladyzhenka"
+              - column:
+                  name: email
+                  value: "vitali@example.com"
+              - column:
+                  name: username
+                  value: "vitali"
+              - column:
+                  name: password
+                  value: "password"
+              - column:
+                  name: role
+                  value: "CLIENT"
+        - insert:
+            tableName: tasks
+            columns:
+              - column:
+                  name: title
+                  value: "Занятие с носителем языка"
+              - column:
+                  name: description
+                  value: "Урок по английскому"
+              - column:
+                  name: link
+                  value: "https://example.com/lesson1"
+              - column:
+                  name: status
+                  value: "Не выполнено"
+              - column:
+                  name: payment_amount
+                  value: "20.00"
+              - column:
+                  name: payment_due_date
+                  value: "2025-05-15"
+              - column:
+                  name: user_id
+                  value: "2"
+        - insert:
+            tableName: tasks
+            columns:
+              - column:
+                  name: title
+                  value: "Чтение книги"
+              - column:
+                  name: description
+                  value: "Прочитать книгу"
+              - column:
+                  name: link
+                  value: "https://books.su/book1"
+              - column:
+                  name: status
+                  value: "Выполнено"
+              - column:
+                  name: payment_amount
+                  value: "15.00"
+              - column:
+                  name: payment_due_date
+                  value: "2025-05-10"
+              - column:
+                  name: user_id
+                  value: "2"
