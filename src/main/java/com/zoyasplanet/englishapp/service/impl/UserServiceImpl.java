@@ -28,31 +28,37 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public UserDTO getUserById(Long id) {
-        return userRepository.findById(id)
+        return userRepository.findByIdWithTasks(id)
                 .map(userMapper::toDTO)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<UserDTO> getAllUsers() {
-        return userRepository.findAll().stream()
+        return userRepository.findAllWithTasks().stream()
                 .map(userMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
     @Override
+    @Transactional
     public UserDTO updateUser(Long id, UserDTO userDTO) {
-        User existingUser = userRepository.findById(id)
+        User existingUser = userRepository.findByIdWithTasks(id)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
-        User updatedUser = userMapper.toEntity(userDTO);
-        updatedUser.setId(existingUser.getId()); // Сохраняем ID
-        updatedUser = userRepository.save(updatedUser);
-        return userMapper.toDTO(updatedUser);
+        userMapper.updateEntity(existingUser, userDTO);
+        User savedUser = userRepository.save(existingUser);
+        return userMapper.toDTO(savedUser);
     }
 
     @Override
+    @Transactional
     public void deleteUser(Long id) {
+        if(!userRepository.existsById(id)) {
+            throw new RuntimeException("User not found with id: " + id);
+        }
         userRepository.deleteById(id);
     }
 }

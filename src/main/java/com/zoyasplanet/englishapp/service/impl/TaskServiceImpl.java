@@ -2,11 +2,14 @@ package com.zoyasplanet.englishapp.service.impl;
 
 import com.zoyasplanet.englishapp.dto.TaskDTO;
 import com.zoyasplanet.englishapp.entity.Task;
+import com.zoyasplanet.englishapp.entity.User;
 import com.zoyasplanet.englishapp.mapper.TaskMapper;
 import com.zoyasplanet.englishapp.repository.TaskRepository;
+import com.zoyasplanet.englishapp.repository.UserRepository;
 import com.zoyasplanet.englishapp.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,10 +21,16 @@ public class TaskServiceImpl implements TaskService {
 
     private final TaskRepository taskRepository;
     private final TaskMapper taskMapper;
+    private final UserRepository userRepository;
 
     @Override
+    @Transactional
     public TaskDTO createTask(TaskDTO taskDTO) {
+        User user = userRepository.findById(taskDTO.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + taskDTO.getUserId()));
+
         Task task = taskMapper.toEntity(taskDTO);
+        task.setUser(user); // Устанавливаем пользователя
         task = taskRepository.save(task);
         return taskMapper.toDTO(task);
     }

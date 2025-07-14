@@ -31,4 +31,14 @@ public class TaskMapper {
         taskDTO.setUserId(task.getUser() != null ? task.getUser().getId() : null);
         return taskDTO;
     }
+
+    public void updateEntity(Task task, TaskDTO taskDTO) {
+        task.setTitle(taskDTO.getTitle());
+        task.setDescription(taskDTO.getDescription());
+        task.setLink(taskDTO.getLink());
+        task.setStatus(taskDTO.getStatus());
+        task.setPaymentAmount(taskDTO.getPaymentAmount());
+        task.setPaymentDueDate(taskDTO.getPaymentDueDate());
+        // Не трогаем user, чтобы сохранить связь
+    }
 }

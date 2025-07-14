@@ -39,6 +39,16 @@ public class UserMapper {
         return userDTO;
     }
 
+    public void updateEntity(User user, UserDTO userDTO) {
+        user.setFirstName(userDTO.getFirstName());
+        user.setLastName(userDTO.getLastName());
+        user.setEmail(userDTO.getEmail());
+        user.setUsername(userDTO.getUsername());
+        user.setPassword(userDTO.getPassword());
+        user.setRole(userDTO.getRole());
+        // Не трогаем tasks, чтобы сохранить существующие данные
+    }
+
     // Вспомогательный метод для маппинга связанных задач
     private TaskDTO toTaskDTO(Task task) {
         TaskDTO taskDTO = new TaskDTO();

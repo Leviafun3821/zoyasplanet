@@ -28,5 +28,6 @@ public class TaskDTO {
 
     private LocalDate paymentDueDate;
 
+    @NotNull(message = "User ID cannot be null")
     private Long userId;
 }
