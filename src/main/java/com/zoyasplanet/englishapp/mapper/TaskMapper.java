@@ -2,43 +2,23 @@ package com.zoyasplanet.englishapp.mapper;
 
 import com.zoyasplanet.englishapp.dto.TaskDTO;
 import com.zoyasplanet.englishapp.entity.Task;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.factory.Mappers;
 
+@Mapper
+public interface TaskMapper {
 
-@Component
-public class TaskMapper {
+    TaskMapper INSTANCE = Mappers.getMapper(TaskMapper.class);
 
-    public Task toEntity(TaskDTO taskDTO) {
-        Task task = new Task();
-        task.setTitle(taskDTO.getTitle());
-        task.setDescription(taskDTO.getDescription());
-        task.setLink(taskDTO.getLink());
-        task.setStatus(taskDTO.getStatus());
-        task.setPaymentAmount(taskDTO.getPaymentAmount());
-        task.setPaymentDueDate(taskDTO.getPaymentDueDate());
-        return task;
-    }
+    @Mapping(target = "userId", source = "user.id")
+    TaskDTO toDto(Task task);
 
-    public TaskDTO toDTO(Task task) {
-        TaskDTO taskDTO = new TaskDTO();
-        taskDTO.setId(task.getId());
-        taskDTO.setTitle(task.getTitle());
-        taskDTO.setDescription(task.getDescription());
-        taskDTO.setLink(task.getLink());
-        taskDTO.setStatus(task.getStatus());
-        taskDTO.setPaymentAmount(task.getPaymentAmount());
-        taskDTO.setPaymentDueDate(task.getPaymentDueDate());
-        taskDTO.setUserId(task.getUser() != null ? task.getUser().getId() : null);
-        return taskDTO;
-    }
+    @Mapping(target = "user", ignore = true)
+    Task toEntity(TaskDTO taskDTO);
 
-    public void updateEntity(Task task, TaskDTO taskDTO) {
-        task.setTitle(taskDTO.getTitle());
-        task.setDescription(taskDTO.getDescription());
-        task.setLink(taskDTO.getLink());
-        task.setStatus(taskDTO.getStatus());
-        task.setPaymentAmount(taskDTO.getPaymentAmount());
-        task.setPaymentDueDate(taskDTO.getPaymentDueDate());
-        // Не трогаем user, чтобы сохранить связь
-    }
+    @Mapping(target = "user", ignore = true)
+    void updateEntity(@MappingTarget Task task, TaskDTO taskDTO);
+
 }

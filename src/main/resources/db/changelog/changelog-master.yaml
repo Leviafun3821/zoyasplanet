@@ -174,3 +174,90 @@ databaseChangeLog:
               - column:
                   name: user_id
                   value: "2"
+  - changeSet:
+      id: 3
+      author: vitali
+      changes:
+        - createTable:
+            tableName: payments
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: amount
+                  type: double precision
+                  constraints:
+                    nullable: false
+              - column:
+                  name: due_date
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: paid_date
+                  type: date
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_payments_user
+                    references: users(id)
+              - column:
+                  name: status
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+        - sql:
+            sql: INSERT INTO payments (amount, due_date, user_id, status) VALUES (20.0, '2025-08-01', 2, 'PENDING');
+  - changeSet:
+      id: 4
+      author: vitali
+      changes:
+        - createTable:
+            tableName: schedules
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: date
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: time
+                  type: time
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_schedules_user
+                    references: users(id)
+              - column:
+                  name: teacher_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_schedules_teacher
+                    references: users(id)
+              - column:
+                  name: task_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_schedules_task
+                    references: tasks(id)
+        - sql:
+            sql: INSERT INTO schedules (date, time, user_id, task_id) VALUES ('2025-08-01', '10:00:00', 2, 1);

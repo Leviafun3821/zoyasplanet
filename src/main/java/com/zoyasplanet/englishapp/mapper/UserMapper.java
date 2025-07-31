@@ -4,62 +4,37 @@ import com.zoyasplanet.englishapp.dto.TaskDTO;
 import com.zoyasplanet.englishapp.dto.UserDTO;
 import com.zoyasplanet.englishapp.entity.Task;
 import com.zoyasplanet.englishapp.entity.User;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
+import org.mapstruct.factory.Mappers;
 
-import java.util.ArrayList;
-import java.util.stream.Collectors;
+import java.util.Collections;
+import java.util.List;
 
 
-@Component
-public class UserMapper {
+@Mapper
+public interface UserMapper {
 
-    public User toEntity(UserDTO userDTO) {
-        User user = new User();
-        user.setFirstName(userDTO.getFirstName());
-        user.setLastName(userDTO.getLastName());
-        user.setEmail(userDTO.getEmail());
-        user.setUsername(userDTO.getUsername());
-        user.setPassword(userDTO.getPassword());
-        user.setRole(userDTO.getRole());
-        return user;
-    }
+    UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
-    public UserDTO toDTO(User user) {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setId(user.getId());
-        userDTO.setFirstName(user.getFirstName());
-        userDTO.setLastName(user.getLastName());
-        userDTO.setEmail(user.getEmail());
-        userDTO.setUsername(user.getUsername());
-        userDTO.setPassword(user.getPassword());
-        userDTO.setRole(user.getRole());
-        userDTO.setTasks(user.getTasks() != null ? user.getTasks().stream()
-                .map(this::toTaskDTO)
-                .collect(Collectors.toList()) : new ArrayList<>());
-        return userDTO;
-    }
+    @Mapping(target = "tasks", qualifiedByName = "mapTasks")
+    UserDTO toDTO(User user);
 
-    public void updateEntity(User user, UserDTO userDTO) {
-        user.setFirstName(userDTO.getFirstName());
-        user.setLastName(userDTO.getLastName());
-        user.setEmail(userDTO.getEmail());
-        user.setUsername(userDTO.getUsername());
-        user.setPassword(userDTO.getPassword());
-        user.setRole(userDTO.getRole());
-        // Не трогаем tasks, чтобы сохранить существующие данные
-    }
+    @Mapping(target = "tasks", ignore = true)
+    User toEntity(UserDTO userDTO);
 
-    // Вспомогательный метод для маппинга связанных задач
-    private TaskDTO toTaskDTO(Task task) {
-        TaskDTO taskDTO = new TaskDTO();
-        taskDTO.setId(task.getId());
-        taskDTO.setTitle(task.getTitle());
-        taskDTO.setDescription(task.getDescription());
-        taskDTO.setLink(task.getLink());
-        taskDTO.setStatus(task.getStatus());
-        taskDTO.setPaymentAmount(task.getPaymentAmount());
-        taskDTO.setPaymentDueDate(task.getPaymentDueDate());
-        taskDTO.setUserId(task.getUser() != null ? task.getUser().getId() : null);
-        return taskDTO;
+    @Mapping(target = "id", ignore = true) // Игнорируем id при обновлении
+    @Mapping(target = "tasks", ignore = true)
+    void updateEntity(@MappingTarget User user, UserDTO userDTO);
+
+    @Named("mapTasks")
+    default List<TaskDTO> mapTasks(List<Task> tasks) {
+        if (tasks == null) return Collections.emptyList();
+        TaskMapper taskMapper = TaskMapper.INSTANCE;
+        return tasks.stream()
+                .map(taskMapper::toDto)
+                .toList();
     }
 }
