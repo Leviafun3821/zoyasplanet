@@ -1,15 +1,18 @@
 package com.zoyasplanet.englishapp.service.impl;
 
+import com.zoyasplanet.englishapp.dto.PaymentDTO;
 import com.zoyasplanet.englishapp.dto.UserDTO;
 import com.zoyasplanet.englishapp.entity.User;
 import com.zoyasplanet.englishapp.exception.UserNotFoundException;
 import com.zoyasplanet.englishapp.mapper.UserMapper;
 import com.zoyasplanet.englishapp.repository.UserRepository;
+import com.zoyasplanet.englishapp.service.PaymentService;
 import com.zoyasplanet.englishapp.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,6 +21,7 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final PaymentService paymentService;
 
     @Override
     @Transactional
@@ -61,4 +65,23 @@ public class UserServiceImpl implements UserService {
         }
         userRepository.deleteById(id);
     }
+
+    @Override
+    @Transactional
+    public UserDTO createClientAndPayment(UserDTO userDTO, double amount) {
+        // Создание пользователя
+        User user = UserMapper.INSTANCE.toEntity(userDTO);
+        User savedUser = userRepository.save(user);
+
+        // Создание DTO для платежа и делегирование PaymentService
+        PaymentDTO paymentDTO = new PaymentDTO();
+        paymentDTO.setUserId(savedUser.getId());
+        paymentDTO.setAmount(amount);
+        paymentDTO.setDueDate(LocalDate.now().withDayOfMonth(7)); // 7-е следующего месяца
+        paymentDTO.setStatus(PaymentDTO.PaymentStatus.PENDING);
+        paymentService.createPayment(paymentDTO); // Используем существующий метод
+
+        return UserMapper.INSTANCE.toDTO(savedUser);
+    }
+
 }

@@ -45,4 +45,12 @@ public class UserController {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/clients")
+    public ResponseEntity<UserDTO> createClientAndPayment(@Valid @RequestBody UserDTO userDTO,
+                                                          @RequestParam double amount) {
+        UserDTO createdUser = userService.createClientAndPayment(userDTO, amount);
+        return ResponseEntity.ok(createdUser);
+    }
+
 }

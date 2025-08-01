@@ -3,6 +3,7 @@ package com.zoyasplanet.englishapp.service;
 import com.zoyasplanet.englishapp.dto.PaymentDTO;
 import com.zoyasplanet.englishapp.entity.Payment;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface PaymentService {
@@ -14,4 +15,7 @@ public interface PaymentService {
 
     // Новый метод для доступа к логике напоминаний
     void checkAndSendReminder(Payment payment);
+
+    void processPayment(Long paymentId);
+    LocalDate updateDueDate(Payment payment); // Для переиспользования в третьем вопросе
 }

@@ -22,6 +22,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PaymentServiceImpl implements PaymentService{
 
+    private static final String PAYMENT_NOT_FOUND_MSG = "Payment not found with id: ";
+
     private final PaymentRepository paymentRepository;
     private final UserRepository userRepository;
     private final EmailService emailService;
@@ -42,7 +44,7 @@ public class PaymentServiceImpl implements PaymentService{
     @Transactional
     public PaymentDTO updatePayment(Long id, PaymentDTO paymentDTO) {
         var existingPayment = paymentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Payment not found with id: " + id));
+                .orElseThrow(() -> new RuntimeException(PAYMENT_NOT_FOUND_MSG + id));
         PaymentMapper.INSTANCE.updateEntity(existingPayment, paymentDTO);
         existingPayment = paymentRepository.save(existingPayment);
         checkAndSendReminder(existingPayment);
@@ -54,7 +56,7 @@ public class PaymentServiceImpl implements PaymentService{
     public PaymentDTO getPaymentById(Long id) {
         return paymentRepository.findById(id)
                 .map(PaymentMapper.INSTANCE::toDto)
-                .orElseThrow(() -> new RuntimeException("Payment not found with id: " + id));
+                .orElseThrow(() -> new RuntimeException(PAYMENT_NOT_FOUND_MSG + id));
     }
 
     @Override
@@ -99,6 +101,23 @@ public class PaymentServiceImpl implements PaymentService{
                                 "не сможем обеспечить Вам дальнейшее взаимодействие с нашими сервисами.");
             }
         }
+    }
+
+    @Override
+    @Transactional
+    public void processPayment(Long paymentId) {
+        Payment payment = paymentRepository.findById(paymentId)
+                .orElseThrow(() -> new RuntimeException(PAYMENT_NOT_FOUND_MSG + paymentId));
+        payment.setStatus(PaymentStatus.PAID);
+        payment.setPaidDate(LocalDate.now());
+        payment.setDueDate(updateDueDate(payment)); // Прямой вызов, так как не требуется транзакция
+        paymentRepository.save(payment);
+        checkAndSendReminder(payment);
+    }
+
+    @Override
+    public LocalDate updateDueDate(Payment payment) { // Убрана @Transactional
+        return payment.getDueDate().plusMonths(1).withDayOfMonth(7);
     }
 
 }

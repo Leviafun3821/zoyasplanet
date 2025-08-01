@@ -46,4 +46,10 @@ public class PaymentController {
         return ResponseEntity.noContent().build();
     }
 
+    @PostMapping("/{id}/process")
+    public ResponseEntity<Void> processPayment(@PathVariable Long id) {
+        paymentService.processPayment(id);
+        return ResponseEntity.ok().build();
+    }
+
 }
