@@ -18,4 +18,6 @@ public interface PaymentService {
 
     void processPayment(Long paymentId);
     LocalDate updateDueDate(Payment payment); // Для переиспользования в третьем вопросе
+
+    void confirmPayment(Long paymentId, Boolean updateDueDate);
 }

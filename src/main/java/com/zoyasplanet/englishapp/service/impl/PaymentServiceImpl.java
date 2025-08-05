@@ -116,6 +116,20 @@ public class PaymentServiceImpl implements PaymentService{
     }
 
     @Override
+    @Transactional
+    public void confirmPayment(Long paymentId, Boolean updateDueDate) {
+        Payment payment = paymentRepository.findById(paymentId)
+                .orElseThrow(() -> new RuntimeException(PAYMENT_NOT_FOUND_MSG + paymentId));
+        payment.setStatus(PaymentStatus.PAID);
+        payment.setPaidDate(LocalDate.now());
+        if (updateDueDate != null && updateDueDate) { // Проверяем на null и true
+            payment.setDueDate(this.updateDueDate(payment));
+        }
+        paymentRepository.save(payment);
+        checkAndSendReminder(payment);
+    }
+
+    @Override
     public LocalDate updateDueDate(Payment payment) { // Убрана @Transactional
         return payment.getDueDate().plusMonths(1).withDayOfMonth(7);
     }

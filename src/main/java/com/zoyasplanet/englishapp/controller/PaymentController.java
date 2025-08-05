@@ -52,4 +52,10 @@ public class PaymentController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/{id}/confirm")
+    public ResponseEntity<Void> confirmPayment(@PathVariable Long id, @RequestParam(required = false) Boolean updateDueDate) {
+        paymentService.confirmPayment(id, updateDueDate);
+        return ResponseEntity.ok().build();
+    }
+
 }
