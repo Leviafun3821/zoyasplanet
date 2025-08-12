@@ -9,6 +9,7 @@ import com.zoyasplanet.englishapp.repository.UserRepository;
 import com.zoyasplanet.englishapp.service.PaymentService;
 import com.zoyasplanet.englishapp.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,11 +23,13 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PaymentService paymentService;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
     public UserDTO createUser(UserDTO userDTO) {
         User user = UserMapper.INSTANCE.toEntity(userDTO);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         User savedUser = userRepository.save(user);
         return UserMapper.INSTANCE.toDTO(savedUser);
     }
@@ -53,6 +56,11 @@ public class UserServiceImpl implements UserService {
         User existingUser = userRepository.findByIdWithTasks(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
         UserMapper.INSTANCE.updateEntity(existingUser, userDTO);
+        // Проверяем, был ли изменён пароль, и хешируем, если да
+        if (userDTO.getPassword() != null && !userDTO.getPassword().isEmpty() &&
+                !passwordEncoder.matches(userDTO.getPassword(), existingUser.getPassword())) {
+            existingUser.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        }
         User savedUser = userRepository.save(existingUser);
         return UserMapper.INSTANCE.toDTO(savedUser);
     }
@@ -71,6 +79,7 @@ public class UserServiceImpl implements UserService {
     public UserDTO createClientAndPayment(UserDTO userDTO, double amount) {
         // Создание пользователя
         User user = UserMapper.INSTANCE.toEntity(userDTO);
+        user.setPassword(passwordEncoder.encode(user.getPassword())); // Хеширование
         User savedUser = userRepository.save(user);
 
         // Создание DTO для платежа и делегирование PaymentService

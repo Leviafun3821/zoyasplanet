@@ -16,4 +16,6 @@ public interface UserRepository extends BaseRepository<User, Long> {
 
     @Query("SELECT u FROM User u LEFT JOIN FETCH u.tasks WHERE u.id = ?1")
     Optional<User> findByIdWithTasks(Long id);
+
+    Optional<User> findByUsername(String username);
 }

@@ -19,6 +19,7 @@ public interface UserMapper {
 
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
+    @Mapping(target = "password", ignore = true) // Игнорируем пароль в ответе
     @Mapping(target = "tasks", qualifiedByName = "mapTasks")
     UserDTO toDTO(User user);
 

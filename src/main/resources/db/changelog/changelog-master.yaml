@@ -261,3 +261,17 @@ databaseChangeLog:
                     references: tasks(id)
         - sql:
             sql: INSERT INTO schedules (date, time, user_id, task_id) VALUES ('2025-08-01', '10:00:00', 2, 1);
+  - changeSet:
+      id: 5
+      author: vitali
+      changes:
+        - dropForeignKeyConstraint:
+            baseTableName: payments
+            constraintName: fk_payments_user
+        - addForeignKeyConstraint:
+            baseTableName: payments
+            constraintName: fk_payments_user
+            referencedTableName: users
+            referencedColumnNames: id
+            baseColumnNames: user_id
+            onDelete: CASCADE

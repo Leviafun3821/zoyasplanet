@@ -41,11 +41,15 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @NotBlank(message = "Role cannot be empty")
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String role; // "ADMIN" или "CLIENT"
+    private Role role; // "ADMIN" или "CLIENT"
 
     // Связь с заданиями
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Task> tasks = new ArrayList<>();
+
+    // Связь с платежами
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Payment> payments = new ArrayList<>();
 }
