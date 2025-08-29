@@ -11,6 +11,6 @@ public interface UserService {
     List<UserDTO> getAllUsers();
     UserDTO updateUser(Long id, UserDTO userDTO);
     void deleteUser(Long id);
-
+    Long getUserIdByUsername(String username);
     UserDTO createClientAndPayment(UserDTO userDTO, double amount);
 }

@@ -18,6 +18,7 @@ public interface TaskMapper {
     @Mapping(target = "user", ignore = true)
     Task toEntity(TaskDTO taskDTO);
 
+    @Mapping(target = "id", ignore = true) // Добавляем, чтобы сохранить id
     @Mapping(target = "user", ignore = true)
     void updateEntity(@MappingTarget Task task, TaskDTO taskDTO);
 

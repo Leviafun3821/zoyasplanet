@@ -22,6 +22,7 @@ public interface ScheduleMapper {
     @Mapping(target = "task", ignore = true)
     Schedule toEntity(ScheduleDTO scheduleDTO);
 
+    @Mapping(target = "id", ignore = true) // Добавляем, чтобы сохранить id
     @Mapping(target = "user", ignore = true)
     @Mapping(target = "teacher", ignore = true)
     @Mapping(target = "task", ignore = true)

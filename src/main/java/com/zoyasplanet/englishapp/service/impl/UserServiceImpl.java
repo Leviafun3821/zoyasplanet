@@ -93,4 +93,11 @@ public class UserServiceImpl implements UserService {
         return UserMapper.INSTANCE.toDTO(savedUser);
     }
 
+    @Transactional(readOnly = true)
+    public Long getUserIdByUsername(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException("User not found with username: " + username));
+        return user.getId();
+    }
+
 }

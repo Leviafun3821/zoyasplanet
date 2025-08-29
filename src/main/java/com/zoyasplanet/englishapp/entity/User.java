@@ -52,4 +52,7 @@ public class User {
     // Связь с платежами
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Payment> payments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Schedule> schedules = new ArrayList<>();
 }

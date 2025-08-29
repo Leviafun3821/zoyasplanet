@@ -1,7 +1,6 @@
 package com.zoyasplanet.englishapp.config;
 
 import com.zoyasplanet.englishapp.security.JwtAuthenticationFilter;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,14 +33,12 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/login").permitAll() // Доступ к логину без авторизации
-                        .requestMatchers("/api/users").hasRole("ADMIN") // Только ADMIN для списка всех пользователей
-                        .requestMatchers("/api/users/**").authenticated() // Все методы под /api/users/* требуют авторизацию
-                        .anyRequest().authenticated() // Все остальные требуют авторизацию
+                        .requestMatchers("/api/users", "/api/payments", "/api/schedules", "/api/tasks").hasRole("ADMIN")
+                        .requestMatchers("/api/users/**", "/api/payments/**", "/api/schedules/**", "/api/tasks/**").authenticated()
+                        .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .userDetailsService(userDetailsService)
-                .httpBasic(httpBasic -> httpBasic.authenticationEntryPoint((request, response, authException) ->
-                        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage())));
+                .userDetailsService(userDetailsService);
         return http.build();
     }
 

@@ -18,6 +18,7 @@ public interface PaymentMapper {
     @Mapping(target = "user", ignore = true)
     Payment toEntity(PaymentDTO paymentDTO);
 
+    @Mapping(target = "id", ignore = true) // Добавляем, чтобы сохранить id
     @Mapping(target = "user", ignore = true)
     void updateEntity(@MappingTarget Payment payment, PaymentDTO paymentDTO);
 
