@@ -55,12 +55,21 @@ public class UserServiceImpl implements UserService {
     public UserDTO updateUser(Long id, UserDTO userDTO) {
         User existingUser = userRepository.findByIdWithTasks(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
-        UserMapper.INSTANCE.updateEntity(existingUser, userDTO);
-        // Проверяем, был ли изменён пароль, и хешируем, если да
-        if (userDTO.getPassword() != null && !userDTO.getPassword().isEmpty() &&
-                !passwordEncoder.matches(userDTO.getPassword(), existingUser.getPassword())) {
-            existingUser.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        }
+
+        // Ручное копирование полей (исключая пароль)
+        existingUser.setFirstName(userDTO.getFirstName());
+        existingUser.setLastName(userDTO.getLastName());
+        existingUser.setEmail(userDTO.getEmail());
+        existingUser.setUsername(userDTO.getUsername());
+        existingUser.setRole(userDTO.getRole());
+
+        // Обработка пароля только если он передан
+        if (userDTO.getPassword() != null && !userDTO.getPassword().isEmpty()) {
+            if (!passwordEncoder.matches(userDTO.getPassword(), existingUser.getPassword())) {
+                existingUser.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+            }
+        } // Если null или пусто, пароль остаётся прежним
+
         User savedUser = userRepository.save(existingUser);
         return UserMapper.INSTANCE.toDTO(savedUser);
     }
