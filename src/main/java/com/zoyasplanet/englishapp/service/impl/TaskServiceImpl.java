@@ -63,4 +63,14 @@ public class TaskServiceImpl implements TaskService {
     public void deleteTask(Long id) {
         taskRepository.deleteById(id);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<TaskDTO> getTasksByUserId(Long userId) {
+        return taskRepository.findByUserId(userId)
+                .stream()
+                .map(TaskMapper.INSTANCE::toDto)
+                .collect(Collectors.toList());
+    }
+
 }

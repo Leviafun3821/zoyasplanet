@@ -134,4 +134,13 @@ public class PaymentServiceImpl implements PaymentService{
         return payment.getDueDate().plusMonths(1).withDayOfMonth(7);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<PaymentDTO> getPaymentsByUserId(Long userId) {
+        return paymentRepository.findByUserId(userId)
+                .stream()
+                .map(PaymentMapper.INSTANCE::toDto)
+                .collect(Collectors.toList());
+    }
+
 }

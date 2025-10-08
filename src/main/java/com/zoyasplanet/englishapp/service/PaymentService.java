@@ -17,7 +17,9 @@ public interface PaymentService {
     void checkAndSendReminder(Payment payment);
 
     void processPayment(Long paymentId);
-    LocalDate updateDueDate(Payment payment); // Для переиспользования в третьем вопросе
+    LocalDate updateDueDate(Payment payment); // Для использования в третьем вопросе
 
     void confirmPayment(Long paymentId, Boolean updateDueDate);
+
+    List<PaymentDTO> getPaymentsByUserId(Long userId);
 }

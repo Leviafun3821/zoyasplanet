@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface PaymentRepository extends BaseRepository<Payment, Long>{
     List<Payment> findByStatus(PaymentStatus status);
+    List<Payment> findByUserId(Long userId); // Новый метод
 }

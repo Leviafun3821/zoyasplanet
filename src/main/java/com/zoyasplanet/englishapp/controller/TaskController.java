@@ -62,4 +62,17 @@ public class TaskController {
         taskService.deleteTask(id);
         return ResponseEntity.noContent().build();
     }
+
+    // Новый EP
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<TaskDTO>> getTasksByUserId(@PathVariable Long userId) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Long currentUserId = userService.getUserIdByUsername(auth.getName());
+        if (!currentUserId.equals(userId) && auth.getAuthorities().stream()
+                .noneMatch(granted -> "ROLE_ADMIN".equals(granted.getAuthority()))) {
+            throw new AccessDeniedException("Доступ только к своим данным или для администратора");
+        }
+        List<TaskDTO> tasks = taskService.getTasksByUserId(userId);
+        return ResponseEntity.ok(tasks);
+    }
 }

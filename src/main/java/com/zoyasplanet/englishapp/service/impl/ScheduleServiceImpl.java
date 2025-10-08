@@ -88,4 +88,13 @@ public class ScheduleServiceImpl implements ScheduleService{
         }
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<ScheduleDTO> getSchedulesByUserId(Long userId) {
+        return scheduleRepository.findByUserId(userId)
+                .stream()
+                .map(ScheduleMapper.INSTANCE::toDto)
+                .collect(Collectors.toList());
+    }
+
 }

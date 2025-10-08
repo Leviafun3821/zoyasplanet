@@ -12,4 +12,7 @@ public interface ScheduleService {
 
     // Новый метод для автоматизации напоминаний о платеже
     void schedulePaymentReminders();
+
+    // Новый метод
+    List<ScheduleDTO> getSchedulesByUserId(Long userId);
 }
