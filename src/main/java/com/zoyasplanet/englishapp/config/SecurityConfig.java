@@ -34,14 +34,15 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration corsConfig = new CorsConfiguration();
-                    corsConfig.addAllowedOrigin("http://localhost:5173"); // Разрешаем фронт
+                    corsConfig.addAllowedOrigin("http://localhost:5173"); // Разрешаем фронт в dev-режиме
+                    corsConfig.addAllowedOrigin("http://localhost:8080"); // Разрешаем фронт в JAR-режиме
                     corsConfig.addAllowedMethod("*");
                     corsConfig.addAllowedHeader("*");
                     corsConfig.setAllowCredentials(true);
                     return corsConfig;
                 }))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/login").permitAll() // Доступ к логину без авторизации
+                        .requestMatchers("/", "/index.html", "/assets/**", "/static/**", "/api/login", "/zoya-admin", "/client-dashboard").permitAll()
                         .requestMatchers("/api/users", "/api/payments", "/api/schedules", "/api/tasks").hasRole("ADMIN")
                         .requestMatchers("/api/users/**", "/api/payments/**", "/api/schedules/**", "/api/tasks/**").authenticated()
                         .anyRequest().authenticated()
