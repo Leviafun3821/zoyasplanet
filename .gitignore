@@ -34,4 +34,3 @@ build/
 
 .env
 docker-compose.yml
-src/main/resources/static/
