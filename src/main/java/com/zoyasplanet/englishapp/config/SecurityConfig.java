@@ -36,6 +36,7 @@ public class SecurityConfig {
                     CorsConfiguration corsConfig = new CorsConfiguration();
                     corsConfig.addAllowedOrigin("http://localhost:5173"); // Разрешаем фронт в dev-режиме
                     corsConfig.addAllowedOrigin("http://localhost:8080"); // Разрешаем фронт в JAR-режиме
+                    corsConfig.addAllowedOrigin("https://zoyasplanet-production.up.railway.app"); // Разрешаем Railway
                     corsConfig.addAllowedMethod("*");
                     corsConfig.addAllowedHeader("*");
                     corsConfig.setAllowCredentials(true);
