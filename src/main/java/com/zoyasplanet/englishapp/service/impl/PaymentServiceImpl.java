@@ -75,7 +75,7 @@ public class PaymentServiceImpl implements PaymentService{
 
     @Override
     public void checkAndSendReminder(Payment payment) {
-        LocalDate today = LocalDate.now(); // Реальная дата
+        LocalDate today = LocalDate.of(2025, 10, 7); // Реальная дата
         int currentDay = today.getDayOfMonth();
         String userEmail = payment.getUser().getEmail();
         double amount = payment.getAmount();

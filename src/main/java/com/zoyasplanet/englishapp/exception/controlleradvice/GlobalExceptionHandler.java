@@ -1,5 +1,6 @@
 package com.zoyasplanet.englishapp.exception.controlleradvice;
 
+import com.zoyasplanet.englishapp.exception.EmailSendException;
 import com.zoyasplanet.englishapp.exception.TaskNotFoundException;
 import com.zoyasplanet.englishapp.exception.UserNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -60,6 +61,12 @@ public class GlobalExceptionHandler {
                 .orElse("Validation failed");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(errorMessage);
+    }
+
+    @ExceptionHandler(EmailSendException.class)
+    public ResponseEntity<String> handleEmailSendException(EmailSendException ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Ошибка отправки email: " + ex.getMessage());
     }
 
 }
