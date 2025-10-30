@@ -23,9 +23,11 @@ public class EmailServiceImpl implements EmailService {
     public void sendPaymentReminder(String to, String subject, String text) {
         try {
             Email from = new Email("zoya.napominator@gmail.com");
+            from.setName("Zoya's English Planet");
             Email toEmail = new Email(to);
             Content content = new Content("text/plain", text);
             Mail mail = new Mail(from, subject, toEmail, content);
+            mail.setReplyTo(new Email("napominator.zoya@mail.ru"));
 
             SendGrid sg = new SendGrid(sendGridApiKey);
             Request request = new Request();
