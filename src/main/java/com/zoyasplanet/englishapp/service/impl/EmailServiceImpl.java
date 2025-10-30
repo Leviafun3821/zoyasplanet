@@ -22,7 +22,7 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void sendPaymentReminder(String to, String subject, String text) {
         try {
-            Email from = new Email("napominator.zoya@mail.ru");
+            Email from = new Email("zoya.napominator@gmail.com");
             Email toEmail = new Email(to);
             Content content = new Content("text/plain", text);
             Mail mail = new Mail(from, subject, toEmail, content);
