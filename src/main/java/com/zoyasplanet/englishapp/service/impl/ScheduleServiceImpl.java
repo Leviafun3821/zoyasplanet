@@ -79,7 +79,7 @@ public class ScheduleServiceImpl implements ScheduleService{
 
     @Override
     @Transactional
-    @Scheduled(cron = "0 * * * * ?")
+    @Scheduled(cron = "0 0 9 5-7 * ?")
     public void schedulePaymentReminders() {
         List<Payment> pendingPayments = paymentRepository.findByStatus(PaymentStatus.PENDING);
 

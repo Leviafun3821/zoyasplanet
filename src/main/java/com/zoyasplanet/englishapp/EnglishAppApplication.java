@@ -3,14 +3,13 @@ package com.zoyasplanet.englishapp;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.mail.MailSenderAutoConfiguration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-@SpringBootApplication(exclude = {MailSenderAutoConfiguration.class})
+@SpringBootApplication
 @EnableScheduling
 @Slf4j
 public class EnglishAppApplication {
