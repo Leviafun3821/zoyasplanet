@@ -6,99 +6,74 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Zoya's English Planet</title>
 
-    <!-- ПРОФЕССИОНАЛЬНЫЙ RESPONSIVE — ТОЛЬКО ДЛЯ МОБИЛЬНЫХ -->
+    <!-- АДАПТАЦИЯ ТОЛЬКО ДЛЯ СМАРТФОНОВ -->
     <style>
       * { box-sizing: border-box; }
-      body, html {
-        margin: 0;
-        padding: 0;
-        font-family: system-ui, -apple-system, sans-serif;
-        width: 100%;
-        overflow-x: hidden;
-      }
-      #root {
-        min-height: 100vh;
-        padding: 16px;
-        max-width: 1400px;
-        margin: 0 auto;
-      }
+      body, html { margin: 0; padding: 0; width: 100%; overflow-x: hidden; font-family: system-ui, sans-serif; }
 
-      /* ТОЛЬКО НА СМАРТФОНАХ */
+      /* ТОЛЬКО НА СМАРТФОНАХ (max-width: 768px) */
       @media (max-width: 768px) {
         /* ШРИФТЫ */
-        h1 { font-size: 1.8rem !important; }
-        h2, h3 { font-size: 1.5rem !important; }
-        p, span, div, li, .MuiTypography-root { font-size: 1.1rem !important; }
+        h1, h2, h3, .MuiTypography-root { font-size: 1.4rem !important; }
+        p, span, div, li, .MuiDataGrid-cell { font-size: 1rem !important; line-height: 1.5 !important; }
 
         /* КНОПКИ И ПОЛЯ */
-        button, input, select, textarea, .MuiButton-root, .MuiTextField-root {
-          font-size: 1.1rem !important;
-          padding: 14px !important;
-          min-height: 52px !important;
-          border-radius: 8px !important;
-        }
-
-        /* MUI DATAGRID — АДАПТИВНЫЙ, НО КОМПАКТНЫЙ */
-        .MuiDataGrid-root {
-          font-size: 0.95rem !important;
-        }
-        .MuiDataGrid-cell, .MuiDataGrid-columnHeader {
-          padding: 8px 4px !important;
-        }
-        .MuiDataGrid-row {
+        button, input, .MuiButton-root, .MuiTextField-root {
+          font-size: 1rem !important;
+          padding: 12px !important;
           min-height: 48px !important;
         }
 
-        /* БОКОВОЕ МЕНЮ — СКРЫТО */
-        .sidebar {
-          position: fixed !important;
-          left: -300px !important;
-          top: 0;
-          width: 280px;
-          height: 100vh;
-          transition: left 0.3s ease;
-          z-index: 1000;
-          background: white;
-          box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+        /* MUI DATAGRID — АДАПТИВНЫЙ */
+        .MuiDataGrid-root {
+          font-size: 0.9rem !important;
         }
-        .sidebar.open {
-          left: 0 !important;
+        .MuiDataGrid-cell, .MuiDataGrid-columnHeader {
+          padding: 6px 4px !important;
         }
 
-        /* КНОПКА-ГАМБУРГЕР */
-        .hamburger {
-          position: fixed;
-          top: 16px;
-          left: 16px;
-          z-index: 1001;
-          background: #1976d2;
-          color: white;
-          border: none;
-          padding: 12px;
-          border-radius: 8px;
-          font-size: 1.5rem;
-          cursor: pointer;
-        }
+        /* СКРЫТЬ БОКОВОЕ МЕНЮ НА СМАРТФОНАХ */
+        .sidebar { display: none !important; }
 
-        /* ОСНОВНОЙ КОНТЕНТ — ОТСТУП ОТ МЕНЮ */
+        /* ОСНОВНОЙ КОНТЕНТ — НА ВЕСЬ ЭКРАН */
         .main-content {
           margin-left: 0 !important;
-          padding-left: 60px !important;
-          transition: padding-left 0.3s ease;
-        }
-        .main-content.menu-open {
-          padding-left: 300px !important;
+          padding: 16px !important;
+          width: 100% !important;
         }
 
-        /* ЛОГИН — ПОЛНОЭКРАННЫЙ */
-        .login-container {
-          width: 100% !important;
-          max-width: 100% !important;
-          padding: 24px !important;
+        /* ТАБЛИЦА — ВЕРТИКАЛЬНЫЕ КАРТОЧКИ */
+        .MuiDataGrid-root {
+          display: block !important;
+        }
+        .MuiDataGrid-columnHeaders,
+        .MuiDataGrid-virtualScroller {
+          display: none !important;
+        }
+        .MuiDataGrid-row {
+          display: block !important;
+          margin: 12px 0 !important;
+          padding: 12px !important;
+          border: 1px solid #ddd !important;
+          border-radius: 8px !important;
+          background: white !important;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .MuiDataGrid-cell {
+          display: block !important;
+          border: none !important;
+          padding: 6px 0 !important;
+          text-align: left !important;
+        }
+        .MuiDataGrid-cell::before {
+          content: attr(data-field) ": ";
+          font-weight: bold;
+          color: #666;
+          text-transform: capitalize;
         }
       }
     </style>
-    <script type="module" crossorigin src="/assets/index-B-4V7PFB.js"></script>
+    <script type="module" crossorigin src="/assets/index-CsL63uoU.js"></script>
     <link rel="stylesheet" crossorigin href="/assets/index-Dtn62Xmo.css">
   </head>
   <body>
