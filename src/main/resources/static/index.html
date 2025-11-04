@@ -4,7 +4,59 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React + TS</title>
+    <title>Zoya's English Planet</title>
+
+    <!-- АДАПТАЦИЯ ДЛЯ СМАРТФОНОВ — 100% РАБОТАЕТ -->
+    <style>
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body, html { width: 100%; overflow-x: hidden; font-family: system-ui, sans-serif; }
+      #root { min-height: 100vh; padding: 16px; }
+
+      @media (max-width: 768px) {
+        /* ШРИФТЫ */
+        h1 { font-size: 1.8rem !important; }
+        h2, h3 { font-size: 1.5rem !important; }
+        p, span, div, li { font-size: 1.1rem !important; line-height: 1.6 !important; }
+
+        /* КНОПКИ И ПОЛЯ */
+        button, input, select, textarea, a {
+          font-size: 1.1rem !important;
+          padding: 14px !important;
+          min-height: 52px !important;
+          width: 100% !important;
+          margin: 8px 0 !important;
+        }
+
+        /* ТАБЛИЦЫ — ВЕРТИКАЛЬНЫЕ */
+        table { border: 0; width: 100%; }
+        table thead { display: none; }
+        table tbody tr {
+          display: block;
+          margin-bottom: 16px;
+          border: 1px solid #ddd;
+          border-radius: 8px;
+          padding: 12px;
+          background: white;
+        }
+        table tbody td {
+          display: block;
+          text-align: left;
+          padding: 8px 0;
+        }
+        table tbody td::before {
+          content: attr(data-label) ": ";
+          font-weight: bold;
+          color: #666;
+        }
+
+        /* ЛОГИН-ФОРМА */
+        .login-container {
+          width: 100% !important;
+          max-width: 100% !important;
+          padding: 20px !important;
+        }
+      }
+    </style>
     <script type="module" crossorigin src="/assets/index-CsL63uoU.js"></script>
     <link rel="stylesheet" crossorigin href="/assets/index-Dtn62Xmo.css">
   </head>
