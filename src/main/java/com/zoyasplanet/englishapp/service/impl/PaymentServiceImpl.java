@@ -2,6 +2,7 @@ package com.zoyasplanet.englishapp.service.impl;
 
 import com.zoyasplanet.englishapp.dto.PaymentDTO;
 import com.zoyasplanet.englishapp.entity.Payment;
+import com.zoyasplanet.englishapp.entity.Adjustment;
 import com.zoyasplanet.englishapp.exception.UserNotFoundException;
 import com.zoyasplanet.englishapp.mapper.PaymentMapper;
 import com.zoyasplanet.englishapp.repository.PaymentRepository;
@@ -78,26 +79,33 @@ public class PaymentServiceImpl implements PaymentService{
         LocalDate today = LocalDate.now(); // Реальная дата
         int currentDay = today.getDayOfMonth();
         String userEmail = payment.getUser().getEmail();
-        double amount = payment.getAmount();
         LocalDate dueDate = payment.getDueDate();
+
+        double finalAmount = Math.max(0.0,
+                payment.getAmount() - payment.getAdjustments().stream()
+                        .mapToDouble(Adjustment::getAmount)
+                        .sum()
+        );
 
         if (payment.getStatus() == PaymentStatus.PENDING && currentDay >= 5 && currentDay <= 7) {
             long daysUntilDue = ChronoUnit.DAYS.between(today, dueDate);
+            String amountStr = String.format("%.2f", finalAmount);
+
             if (currentDay == 5 && daysUntilDue == 2) { // 5-е — за 2 дня
                 emailService.sendPaymentReminder(userEmail, "Напоминание об оплате",
                         "Уважаемый(ая) клиент Zoya'sEnglishPlanet, информируем Вас о том, что через 2 дня " +
                                 "истечет срок оплаты занятий за текущий месяц, поэтому просим Вас заблаговременно " +
-                                "произвести оплату в размере " + amount + " рублей.");
+                                "произвести оплату в размере " + amountStr + " рублей.");
             } else if (currentDay == 6 && daysUntilDue == 1) { // 6-е — за 1 день
                 emailService.sendPaymentReminder(userEmail, "Напоминание об оплате",
                         "Уважаемый(ая) клиент Zoya'sEnglishPlanet, информируем Вас о том, что через 1 день " +
                                 "истечет срок оплаты занятий за текущий месяц, поэтому просим Вас заблаговременно " +
-                                "произвести оплату в размере " + amount + " рублей.");
+                                "произвести оплату в размере " + amountStr + " рублей.");
             } else if (currentDay == 7 && daysUntilDue == 0) { // 7-е — в день оплаты
                 emailService.sendPaymentReminder(userEmail, "Срочное напоминание об оплате",
                         "Уважаемый(ая) клиент Zoya'sEnglishPlanet, информируем Вас о том, что сегодня " +
                                 "истекает срок оплаты занятий за текущий месяц, в этой связи просим Вас " +
-                                "произвести оплату в размере " + amount + " рублей. В противном случае мы " +
+                                "произвести оплату в размере " + amountStr + " рублей. В противном случае мы " +
                                 "не сможем обеспечить Вам дальнейшее взаимодействие с нашими сервисами.");
             }
         }

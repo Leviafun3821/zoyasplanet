@@ -275,3 +275,5 @@ databaseChangeLog:
             referencedColumnNames: id
             baseColumnNames: user_id
             onDelete: CASCADE
+  - include:
+      file: db/changelog/2025-11-12-create-adjustments.yaml

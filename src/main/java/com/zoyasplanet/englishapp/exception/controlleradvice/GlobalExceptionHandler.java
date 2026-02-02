@@ -1,6 +1,7 @@
 package com.zoyasplanet.englishapp.exception.controlleradvice;
 
 import com.zoyasplanet.englishapp.exception.EmailSendException;
+import com.zoyasplanet.englishapp.exception.ResourceNotFoundException;
 import com.zoyasplanet.englishapp.exception.TaskNotFoundException;
 import com.zoyasplanet.englishapp.exception.UserNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -67,6 +68,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleEmailSendException(EmailSendException ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body("Ошибка отправки email: " + ex.getMessage());
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<String> handleResourceNotFoundException(ResourceNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ex.getMessage());
     }
 
 }

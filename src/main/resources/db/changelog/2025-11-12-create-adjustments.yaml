@@ -1,0 +1,34 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-adjustments-table
+      author: vitali
+      changes:
+        - createTable:
+            tableName: adjustments
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: amount
+                  type: double precision
+                  constraints:
+                    nullable: false
+              - column:
+                  name: reason
+                  type: varchar(255)
+              - column:
+                  name: adjustment_date
+                  type: date
+                  defaultValueComputed: CURRENT_DATE
+              - column:
+                  name: payment_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_adjustments_payment
+                    references: payments(id)
+                    onDelete: CASCADE

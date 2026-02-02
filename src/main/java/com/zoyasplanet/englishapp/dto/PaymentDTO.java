@@ -5,11 +5,16 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class PaymentDTO {
 
     private Long id;
+
+    private Double finalAmount;
+    private List<AdjustmentDTO> adjustments = new ArrayList<>();
 
     @NotNull(message = "Amount cannot be null")
     @DecimalMin(value = "0.0", inclusive = false, message = "Amount must be greater than 0")
